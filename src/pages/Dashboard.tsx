@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import { LogOut, Shield, Smartphone, Zap } from 'lucide-react'
+import { LogOut, Shield, Smartphone, Zap, User, Upload } from 'lucide-react'
+import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import Sidebar from '../components/layout/Sidebar'
