@@ -3,13 +3,12 @@ import { LogOut, Shield, Smartphone, Zap, User, Upload } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import Sidebar from '../components/layout/Sidebar'
 import { Button } from '../components/ui/Button'
 import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../services/supabase'
 
 export default function Dashboard() {
-  const { user, loading } = useAuth()
+  const { user } = useAuth()
   const navigate = useNavigate()
   const [profileImage, setProfileImage] = useState<string>('')
   const [isUploading, setIsUploading] = useState(false)
@@ -95,19 +94,11 @@ export default function Dashboard() {
     },
   }
 
-  if (loading) return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-white"></div>
-    </div>
-  )
-
   return (
-    <div className="min-h-screen bg-black text-white font-sans selection:bg-white selection:text-black">
-      <Sidebar />
-      
+    <div className="min-h-screen">
       <nav className="sticky top-0 z-50 backdrop-blur-md bg-black/70 border-b border-zinc-800 p-4">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 ml-12 md:ml-0">
             <img src="/pwa-192.png" className="w-8 h-8 object-contain" alt="Logo" />
             <span className="font-black tracking-tighter text-xl uppercase italic">Jeck</span>
           </div>

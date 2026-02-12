@@ -1,29 +1,23 @@
-import { supabase } from "../../services/supabase"
-import { useNavigate } from "react-router-dom"
+import { useAuth } from "../../hooks/useAuth"
+import Sidebar from "./Sidebar"
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate()
+  const { loading } = useAuth()
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    navigate("/login")
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-white"></div>
+      </div>
+    )
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <nav className="bg-white shadow p-4 flex justify-between">
-        <h1 className="font-bold">PWA Factory</h1>
-        <button
-          onClick={handleLogout}
-          className="text-sm bg-black text-white px-4 py-2 rounded"
-        >
-          Logout
-        </button>
-      </nav>
-
-      <main className="p-6">
+    <div className="min-h-screen bg-black text-white font-sans">
+      <Sidebar />
+      <div className="transition-all duration-300">
         {children}
-      </main>
+      </div>
     </div>
   )
 }

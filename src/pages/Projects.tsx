@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { Plus, Layout, Smartphone, Trash2, ExternalLink } from 'lucide-react'
-import Sidebar from '../components/layout/Sidebar'
 import { Button } from '../components/ui/Button'
 import toast from 'react-hot-toast'
 
@@ -11,12 +10,10 @@ export default function Projects() {
   ]
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans">
-      <Sidebar />
-      
-      <main className="max-w-6xl mx-auto p-6 lg:p-12 ml-0 md:ml-16">
+    <div className="min-h-screen">
+      <main className="max-w-6xl mx-auto p-6 lg:p-12">
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-          <div>
+          <div className="ml-12 md:ml-0">
             <h1 className="text-4xl font-black tracking-tighter uppercase italic">Production Line</h1>
             <p className="text-zinc-500 mt-2">Kelola dan bangun aplikasi PWA Anda di sini.</p>
           </div>
@@ -74,7 +71,6 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* Empty State Placeholder */}
         <div className="mt-12 p-12 border-2 border-dashed border-zinc-800 rounded-[3rem] flex flex-col items-center justify-center text-center">
           <Layout size={48} className="text-zinc-800 mb-4" />
           <h3 className="text-zinc-500 font-bold uppercase tracking-widest">Slot Produksi Tersedia</h3>
