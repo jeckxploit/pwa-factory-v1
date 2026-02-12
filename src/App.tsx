@@ -16,6 +16,8 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        
+        {/* Route Dashboard */}
         <Route 
           path="/dashboard" 
           element={
@@ -26,22 +28,25 @@ function App() {
             </ProtectedRoute>
           } 
         />
+
+        {/* Route Create Post */}
+        <Route 
+          path="/create" 
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <CreatePost />
+              </AppLayout>
+            </ProtectedRoute>
+          } 
+        />
+
         <Route 
           path="/projects" 
           element={
             <ProtectedRoute>
               <AppLayout>
                 <Projects />
-              </AppLayout>
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/create-post" 
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <CreatePost />
               </AppLayout>
             </ProtectedRoute>
           } 
