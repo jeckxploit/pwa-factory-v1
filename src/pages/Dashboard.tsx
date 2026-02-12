@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { LogOut, Shield, Smartphone, Zap, User, Upload, Trash2, FileText, Loader2, Plus } from 'lucide-react'
+import { LogOut, Shield, Smartphone, Zap, User, Upload, Trash2, FileText, Loader2, Plus, ArrowUpRight, Activity } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
@@ -11,317 +11,171 @@ import { getPosts, deletePost } from '../services/postService'
 export default function Dashboard() {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const [profileImage, setProfileImage] = useState<string>('')
-  const [isUploading, setIsUploading] = useState(false)
   const [posts, setPosts] = useState<any[]>([])
   const [isLoadingPosts, setIsLoadingPosts] = useState(true)
 
   useEffect(() => {
-    if (user) {
-      getProfile()
-      fetchPosts()
-    }
+    if (user) fetchPosts()
   }, [user])
 
-  const getProfile = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('avatar_url')
-        .eq('id', user?.id)
-        .single()
-
-      if (error && error.code !== 'PGRST116') throw error
-      if (data?.avatar_url) setProfileImage(data.avatar_url)
-    } catch (error) {
-      console.error('Error loading profile:', error)
-    }
-  }
-
   const fetchPosts = async () => {
-    if (!user) return
     setIsLoadingPosts(true)
     try {
-      const data = await getPosts(user.id)
+      const data = await getPosts(user!.id)
       setPosts(data || [])
     } catch (error: any) {
-      toast.error('Gagal memuat data produksi')
+      toast.error('Gagal memuat data')
     } finally {
       setIsLoadingPosts(false)
     }
   }
 
   const handleDeletePost = async (id: string) => {
-    if (!user) return
-    const loadingToast = toast.loading('Menghapus data...')
+    const loadingToast = toast.loading('Deleting...')
     try {
-      await deletePost(id, user.id)
-      setPosts(posts.filter(post => post.id !== id))
-      toast.success('Data berhasil dihapus', { id: loadingToast })
-    } catch (error: any) {
-      toast.error('Gagal menghapus data', { id: loadingToast })
+      await deletePost(id, user!.id)
+      setPosts(posts.filter(p => p.id !== id))
+      toast.success('Deleted successfully', { id: loadingToast })
+    } catch (error) {
+      toast.error('Failed to delete', { id: loadingToast })
     }
-  }
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    toast.success('Berhasil keluar!')
-    navigate('/login')
-  }
-
-  const handleProfileImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file || !user) return
-
-    setIsUploading(true)
-    try {
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${user.id}-${Date.now()}.${fileExt}`
-      
-      const { error: uploadError } = await supabase.storage
-        .from('profile-images')
-        .upload(fileName, file)
-
-      if (uploadError) throw uploadError
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('profile-images')
-        .getPublicUrl(fileName)
-
-      const { error: upsertError } = await supabase
-        .from('profiles')
-        .upsert({ id: user.id, avatar_url: publicUrl, updated_at: new Date() })
-
-      if (upsertError) throw upsertError
-
-      setProfileImage(publicUrl)
-      toast.success('Foto profil diperbarui!')
-    } catch (error: any) {
-      toast.error(error.message || 'Gagal upload foto profil')
-    } finally {
-      setIsUploading(false)
-    }
-  }
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
   }
 
   return (
-    <div className="min-h-screen">
-      <nav className="sticky top-0 z-50 backdrop-blur-md bg-black/70 border-b border-zinc-800 p-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-3 ml-12 md:ml-0">
-            <img src="/pwa-192.png" className="w-8 h-8 object-contain" alt="Logo" />
-            <span className="font-black tracking-tighter text-xl uppercase italic">Jeck</span>
+    <div className="p-6 lg:p-12 max-w-7xl mx-auto">
+      {/* Header Section */}
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+        <div>
+          <div className="flex items-center gap-2 text-zinc-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-3">
+            <Activity size={12} /> System Online
           </div>
-          <Button variant="secondary" onClick={handleLogout} className="text-xs px-4 py-2 uppercase tracking-widest">
-            <LogOut size={14} className="mr-2" /> Logout
-          </Button>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter uppercase italic leading-none">
+            Control <span className="text-zinc-700">Center</span>
+          </h1>
         </div>
-      </nav>
+        <Button onClick={() => navigate('/create')} className="h-14 px-8 rounded-2xl flex items-center gap-2 group">
+          <Plus size={20} /> 
+          <span>NEW PRODUCTION</span>
+          <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+        </Button>
+      </header>
 
-      <main className="max-w-6xl mx-auto p-6 lg:p-12">
-        <motion.header 
-          className="mb-12"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.div variants={itemVariants} className="inline-block px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-4">
-            System Operational
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        {[
+          { label: 'Total Apps', value: posts.length, icon: Smartphone, color: 'text-white' },
+          { label: 'System Health', value: '99.9%', icon: Shield, color: 'text-green-500' },
+          { label: 'Engine Speed', value: '1.2s', icon: Zap, color: 'text-yellow-500' },
+        ].map((stat, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className="bg-zinc-900/50 border border-zinc-800 p-8 rounded-[2rem] hover:border-zinc-700 transition-all"
+          >
+            <stat.icon className={`${stat.color} mb-6`} size={24} />
+            <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mb-1">{stat.label}</p>
+            <p className="text-3xl font-black tracking-tighter">{stat.value}</p>
           </motion.div>
-          <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-black tracking-tighter mb-4 leading-none">
-            HALO, <span className="text-zinc-500">{user?.email?.split('@')[0]}!</span>
-          </motion.h1>
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <motion.p variants={itemVariants} className="text-zinc-500 max-w-xl text-lg leading-relaxed">
-              Template kamu sudah terhubung ke mesin produksi. Gunakan panel di bawah untuk mulai membangun 30 aplikasi PWA.
-            </motion.p>
-            <motion.div variants={itemVariants}>
-              <Button onClick={() => navigate('/create')} className="flex items-center gap-2 px-8 py-4 rounded-2xl">
-                <Plus size={20} /> NEW PRODUCTION
-              </Button>
-            </motion.div>
+        ))}
+      </div>
+
+      {/* Main Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        {/* Feed List */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="flex items-center justify-between mb-4 px-2">
+            <h2 className="text-xl font-bold flex items-center gap-2">
+              <FileText size={20} className="text-zinc-500" /> Recent Activity
+            </h2>
+            <button onClick={fetchPosts} className="text-[10px] font-bold text-zinc-500 hover:text-white uppercase tracking-widest transition-colors">
+              Refresh
+            </button>
           </div>
-        </motion.header>
 
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {[
-            { label: 'PWA ENGINE', desc: 'Installable on mobile', icon: Smartphone },
-            { label: 'SUPABASE DB', desc: 'Secure & Real-time', icon: Shield },
-            { label: 'FAST VITE', desc: 'Lightning production', icon: Zap },
-          ].map((item, i) => (
-            <motion.div 
-              key={i} 
-              variants={itemVariants}
-              className="group p-8 rounded-[2rem] bg-zinc-900 border border-zinc-800 hover:border-zinc-400 transition-all duration-500 cursor-default"
-            >
-              <item.icon className="text-white mb-6 group-hover:scale-110 transition-transform" size={32} />
-              <h3 className="text-sm font-bold tracking-widest uppercase mb-1">{item.label}</h3>
-              <p className="text-zinc-500 text-sm leading-relaxed">{item.desc}</p>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Production Feed Section (List + Delete) */}
-        <motion.section 
-          className="mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          <div className="bg-zinc-900 border border-zinc-800 rounded-[2.5rem] p-8">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-3">
-                <FileText size={24} className="text-white" />
-                <h2 className="text-2xl font-bold">Production Feed</h2>
-              </div>
-              <Button variant="secondary" onClick={fetchPosts} className="text-[10px] uppercase tracking-widest">
-                Refresh Feed
-              </Button>
+          {isLoadingPosts ? (
+            <div className="h-64 flex flex-col items-center justify-center bg-zinc-900/30 border border-zinc-800 border-dashed rounded-[2.5rem]">
+              <Loader2 className="animate-spin text-zinc-700 mb-4" size={32} />
+              <p className="text-xs text-zinc-600 uppercase tracking-widest">Syncing Database...</p>
             </div>
-
-            {isLoadingPosts ? (
-              <div className="flex flex-col items-center justify-center py-12 text-zinc-500">
-                <Loader2 className="animate-spin mb-4" size={32} />
-                <p className="text-sm uppercase tracking-widest">Syncing with database...</p>
-              </div>
-            ) : posts.length === 0 ? (
-              <div className="text-center py-12 border-2 border-dashed border-zinc-800 rounded-[2rem]">
-                <p className="text-zinc-500 uppercase tracking-widest text-xs">Belum ada data produksi</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <AnimatePresence mode="popLayout">
-                  {posts.map((post) => (
-                    <motion.div 
-                      key={post.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      className="bg-black border border-zinc-800 p-6 rounded-2xl flex items-center justify-between group hover:border-zinc-600 transition-all"
-                    >
-                      <div className="flex-1">
-                        <h3 className="font-bold text-lg mb-1">{post.title}</h3>
-                        <p className="text-zinc-500 text-sm line-clamp-1">{post.content}</p>
-                        <span className="text-[10px] text-zinc-600 uppercase tracking-tighter mt-2 block">
-                          Created: {new Date(post.created_at).toLocaleDateString()}
-                        </span>
+          ) : posts.length === 0 ? (
+            <div className="h-64 flex flex-col items-center justify-center bg-zinc-900/30 border border-zinc-800 border-dashed rounded-[2.5rem] text-center p-8">
+              <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs mb-2">No Production Data</p>
+              <p className="text-zinc-700 text-sm max-w-xs">Mulai bangun aplikasi pertama Anda dengan menekan tombol New Production.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <AnimatePresence mode="popLayout">
+                {posts.map((post) => (
+                  <motion.div
+                    key={post.id}
+                    layout
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="bg-zinc-900 border border-zinc-800 p-6 rounded-[1.5rem] flex items-center justify-between group hover:border-zinc-500 transition-all"
+                  >
+                    <div className="flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-xl bg-black border border-zinc-800 flex items-center justify-center text-zinc-500 group-hover:text-white transition-colors">
+                        <Smartphone size={20} />
                       </div>
-                      <Button 
-                        variant="secondary" 
-                        onClick={() => handleDeletePost(post.id)}
-                        className="ml-4 p-3 rounded-xl text-zinc-500 hover:text-red-500 hover:bg-red-500/10 transition-colors"
-                      >
-                        <Trash2 size={18} />
-                      </Button>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
-            )}
-          </div>
-        </motion.section>
-
-        <motion.div 
-          className="p-1 w-full bg-gradient-to-r from-zinc-800 via-zinc-400 to-zinc-800 rounded-[2.5rem] mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-        >
-           <div className="bg-black rounded-[2.4rem] p-10 flex flex-col md:flex-row items-center justify-between gap-8">
-              <div>
-                <h2 className="text-2xl font-bold mb-2">Siap untuk Hari Ke-2?</h2>
-                <p className="text-zinc-500">Besok kita akan meng-clone mesin ini menjadi aplikasi Idul Fitri Gallery.</p>
-              </div>
-              <Button onClick={() => navigate('/projects')} className="w-full md:w-auto px-10 rounded-full py-4 text-sm uppercase tracking-widest">
-                Mulai Produksi
-              </Button>
-           </div>
-        </motion.div>
-
-        <motion.section 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
-          <div className="bg-zinc-900 border border-zinc-800 rounded-[2rem] p-8">
-            <div className="flex items-center gap-3 mb-8">
-              <User size={24} className="text-white" />
-              <h2 className="text-2xl font-bold">Profile Settings</h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <label className="text-sm font-medium text-zinc-400 block mb-4">Foto Profil</label>
-                <div className="relative group w-32 h-32">
-                  <div className="w-full h-full rounded-2xl bg-zinc-800 border-2 border-dashed border-zinc-700 flex items-center justify-center overflow-hidden">
-                    {profileImage ? (
-                      <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-                    ) : (
-                      <User size={48} className="text-zinc-600" />
-                    )}
-                  </div>
-                  <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center cursor-pointer">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleProfileImageUpload}
-                      disabled={isUploading}
-                      className="hidden"
-                    />
-                    <div className="text-center">
-                      <Upload size={20} className="text-white mx-auto mb-1" />
-                      <p className="text-[10px] text-white uppercase tracking-tighter">
-                        {isUploading ? 'Uploading...' : 'Change'}
-                      </p>
+                      <div>
+                        <h3 className="font-bold text-lg leading-tight mb-1">{post.title}</h3>
+                        <p className="text-zinc-500 text-sm line-clamp-1 max-w-md">{post.content}</p>
+                      </div>
                     </div>
-                  </label>
-                </div>
+                    <button 
+                      onClick={() => handleDeletePost(post.id)}
+                      className="p-3 text-zinc-600 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar Info */}
+        <div className="space-y-6">
+          <div className="bg-gradient-to-br from-zinc-800 to-zinc-950 p-8 rounded-[2.5rem] border border-zinc-800 relative overflow-hidden group">
+            <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-all" />
+            <h3 className="text-xl font-bold mb-4">Pro Tips</h3>
+            <p className="text-zinc-400 text-sm leading-relaxed mb-6">
+              Gunakan fitur PWA untuk menginstal aplikasi ini langsung di layar utama ponsel Anda.
+            </p>
+            <Button variant="secondary" className="w-full rounded-xl py-3 text-xs font-bold uppercase tracking-widest">
+              Learn More
+            </Button>
+          </div>
+
+          <div className="bg-zinc-900/50 border border-zinc-800 p-8 rounded-[2.5rem]">
+            <h3 className="text-sm font-bold uppercase tracking-widest mb-6 flex items-center gap-2">
+              <User size={16} className="text-zinc-500" /> Account
+            </h3>
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-500 font-bold">
+                {user?.email?.[0].toUpperCase()}
               </div>
-
-              <div className="space-y-6">
-                <div>
-                  <label className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-2">Email Address</label>
-                  <div className="bg-black rounded-xl p-4 border border-zinc-800">
-                    <p className="text-white font-medium">{user?.email}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-2">User ID</label>
-                  <div className="bg-black rounded-xl p-4 border border-zinc-800">
-                    <p className="text-zinc-500 text-[10px] font-mono break-all">{user?.id}</p>
-                  </div>
-                </div>
+              <div className="overflow-hidden">
+                <p className="font-bold truncate">{user?.email?.split('@')[0]}</p>
+                <p className="text-[10px] text-zinc-500 truncate">{user?.email}</p>
               </div>
             </div>
+            <button 
+              onClick={async () => {
+                await supabase.auth.signOut()
+                navigate('/login')
+              }}
+              className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold text-red-500 hover:bg-red-500/5 rounded-xl transition-all border border-transparent hover:border-red-500/20"
+            >
+              <LogOut size={14} /> LOGOUT SYSTEM
+            </button>
           </div>
-        </motion.section>
-      </main>
+        </div>
+      </div>
     </div>
   )
 }

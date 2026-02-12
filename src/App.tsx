@@ -11,13 +11,24 @@ import CreatePost from './pages/CreatePost'
 function App() {
   return (
     <>
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster 
+        position="top-center" 
+        toastOptions={{
+          style: {
+            background: '#18181b',
+            color: '#fff',
+            border: '1px solid #27272a',
+            borderRadius: '1rem',
+            fontSize: '14px'
+          }
+        }} 
+      />
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
-        {/* Route Dashboard */}
+        {/* Protected Routes wrapped with AppLayout */}
         <Route 
           path="/dashboard" 
           element={
@@ -29,7 +40,6 @@ function App() {
           } 
         />
 
-        {/* Route Create Post */}
         <Route 
           path="/create" 
           element={
