@@ -7,7 +7,7 @@ export const getAllPublicPosts = async () => {
     .eq("status", "published")
     .order("created_at", { ascending: false })
 
-  if (error) throw error
+  if (error) throw new Error(error.message)
   return data
 }
 
@@ -18,6 +18,6 @@ export const getPostById = async (id: string) => {
     .eq("id", id)
     .single()
 
-  if (error) throw error
+  if (error) throw new Error(error.message)
   return data
 }

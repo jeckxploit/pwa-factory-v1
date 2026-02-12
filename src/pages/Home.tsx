@@ -4,16 +4,23 @@ import { getAllPublicPosts } from "../services/publicPostService"
 import { Smartphone, Activity, ArrowRight, Cpu } from "lucide-react"
 import { Link } from "react-router-dom"
 import { Button } from "../components/ui/Button"
+import toast from "react-hot-toast"
 
 export default function Home() {
   const [posts, setPosts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getAllPublicPosts().then(data => {
-      setPosts(data)
-      setLoading(false)
-    })
+    getAllPublicPosts()
+      .then(data => {
+        setPosts(data)
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.error(error)
+        toast.error("Gagal memuat data feed")
+        setLoading(false)
+      })
   }, [])
 
   return (
