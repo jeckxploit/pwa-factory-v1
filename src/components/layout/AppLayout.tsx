@@ -1,29 +1,21 @@
 import { motion } from "framer-motion"
-import { useAuth } from "../../hooks/useAuth"
 import Sidebar from "./Sidebar"
+import { Outlet } from "react-router-dom"
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const { loading } = useAuth()
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-zinc-800 border-t-white rounded-full animate-spin" />
-      </div>
-    )
-  }
-
+export default function AppLayout() {
   return (
-    <div className="min-h-screen bg-black text-white font-sans selection:bg-white selection:text-black">
+    <div className="engine-container">
       <Sidebar />
-      <motion.div 
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="lg:ml-72 min-h-screen transition-all duration-300 ease-in-out"
+      <motion.main
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="lg:pl-80 min-h-screen transition-all duration-500"
       >
-        {children}
-      </motion.div>
+        <div className="p-6 lg:p-12 xl:p-20 max-w-[1600px] mx-auto">
+          <Outlet />
+        </div>
+      </motion.main>
     </div>
   )
 }

@@ -10,12 +10,13 @@ import CreatePost from './pages/CreatePost'
 import PublicBlog from './pages/PublicBlog'
 import Home from './pages/Home'
 import PostDetail from './pages/PostDetail'
+import Habit from "./pages/Habit"
 
 function App() {
   return (
     <>
-      <Toaster 
-        position="top-center" 
+      <Toaster
+        position="top-center"
         toastOptions={{
           style: {
             background: '#18181b',
@@ -24,7 +25,7 @@ function App() {
             borderRadius: '1rem',
             fontSize: '14px'
           }
-        }} 
+        }}
       />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -32,39 +33,22 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/blog/:userId" element={<PublicBlog />} />
         <Route path="/post/:slug" element={<PostDetail />} />
-        
-        <Route 
-          path="/dashboard" 
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <Dashboard />
-              </AppLayout>
-            </ProtectedRoute>
-          } 
-        />
 
-        <Route 
-          path="/create" 
+        {/* Standardized App Factory Layout */}
+        <Route
           element={
             <ProtectedRoute>
-              <AppLayout>
-                <CreatePost />
-              </AppLayout>
+              <AppLayout />
             </ProtectedRoute>
-          } 
-        />
-
-        <Route 
-          path="/projects" 
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <Projects />
-              </AppLayout>
-            </ProtectedRoute>
-          } 
-        />
+          }
+        >
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/create" element={<CreatePost />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/habit" element={<Habit />} />
+          <Route path="/analytics" element={<div className="p-12 text-zinc-500 uppercase font-black italic">Analytics Module Coming Soon...</div>} />
+          <Route path="/settings" element={<div className="p-12 text-zinc-500 uppercase font-black italic">System Settings Coming Soon...</div>} />
+        </Route>
       </Routes>
     </>
   )

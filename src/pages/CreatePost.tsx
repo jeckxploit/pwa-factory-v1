@@ -23,13 +23,14 @@ export default function CreatePost() {
 
     setLoading(true)
     const loadingToast = toast.loading("Menyimpan data produksi...")
-    
+
     try {
       await createPost(title, content, status)
       toast.success("Data berhasil disimpan!", { id: loadingToast })
       navigate("/dashboard")
-    } catch (error: any) {
-      toast.error("Gagal menyimpan data: " + error.message, { id: loadingToast })
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Terjadi kesalahan'
+      toast.error("Gagal menyimpan data: " + message, { id: loadingToast })
     } finally {
       setLoading(false)
     }
@@ -38,7 +39,7 @@ export default function CreatePost() {
   return (
     <div className="min-h-screen bg-black text-white p-6 lg:p-12">
       <div className="max-w-2xl mx-auto">
-        <button 
+        <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors mb-8 group"
         >
@@ -105,8 +106,8 @@ export default function CreatePost() {
               </button>
             </div>
 
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={loading}
               className="w-full h-14 rounded-2xl text-sm uppercase tracking-widest font-black flex items-center justify-center gap-2"
             >

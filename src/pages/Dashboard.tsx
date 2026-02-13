@@ -1,35 +1,42 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { LogOut, Shield, Smartphone, Zap, User, Trash2, FileText, Loader2, Plus, ArrowUpRight, Activity, Sparkles, Box } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../components/ui/Button'
 import { useAuth } from '../hooks/useAuth'
-import { supabase } from '../services/supabase'
 import { getPosts, deletePost } from '../services/postService'
+import { getProfile } from '../services/profileService'
+import type { Post } from '../types/post'
+import type { Profile } from '../types/profile'
 
 export default function Dashboard() {
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
   const navigate = useNavigate()
-  const [posts, setPosts] = useState<any[]>([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [isLoadingPosts, setIsLoadingPosts] = useState(true)
+  const [profile, setProfile] = useState<Profile | null>(null)
 
-  useEffect(() => {
-    if (user) fetchPosts()
-  }, [user])
-
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     setIsLoadingPosts(true)
     try {
       const data = await getPosts(user!.id)
       setPosts(data || [])
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Sync Failed'
       console.error("[Dashboard] Sync Failed:", error)
-      toast.error('Sync Failed: ' + error.message)
+      toast.error('Sync Failed: ' + message)
     } finally {
       setIsLoadingPosts(false)
     }
-  }
+  }, [user])
+
+  useEffect(() => {
+    if (user) {
+      fetchPosts()
+      getProfile(user.id).then(setProfile)
+    }
+  }, [user, fetchPosts])
 
   const handleDeletePost = async (id: string) => {
     const loadingToast = toast.loading('Terminating...')
@@ -37,9 +44,10 @@ export default function Dashboard() {
       await deletePost(id, user!.id)
       setPosts(posts.filter(p => p.id !== id))
       toast.success('Terminated', { id: loadingToast })
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Action Failed'
       console.error("[Dashboard] Delete Failed:", error)
-      toast.error('Action Failed: ' + error.message, { id: loadingToast })
+      toast.error('Action Failed: ' + message, { id: loadingToast })
     }
   }
 
@@ -59,9 +67,9 @@ export default function Dashboard() {
             ENGINE <span className="text-zinc-900">OS</span>
           </h1>
         </motion.div>
-        
+
         <Button onClick={() => navigate('/create')} size="lg" className="group">
-          <Plus size={20} strokeWidth={3} className="mr-2" /> 
+          <Plus size={20} strokeWidth={3} className="mr-2" />
           INITIALIZE NEW APP
           <ArrowUpRight size={18} className="ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
         </Button>
@@ -141,7 +149,7 @@ export default function Dashboard() {
                         <p className="text-zinc-600 text-sm font-medium uppercase tracking-widest">{post.content}</p>
                       </div>
                     </div>
-                    <button 
+                    <button
                       onClick={() => handleDeletePost(post.id)}
                       className="p-5 text-zinc-800 hover:text-red-500 hover:bg-red-500/5 rounded-2xl transition-all opacity-0 group-hover:opacity-100"
                     >
@@ -155,12 +163,12 @@ export default function Dashboard() {
         </div>
 
         <div className="space-y-10">
-          <motion.div 
+          <motion.div
             whileHover={{ y: -5 }}
             className="bg-white text-black p-12 rounded-[3rem] shadow-[0_0_50px_rgba(255,255,255,0.1)] group cursor-default"
           >
             <Sparkles className="mb-8" size={32} />
-            <h3 className="text-3xl font-black tracking-tight mb-6 leading-none">PRO<br/>FACTORY</h3>
+            <h3 className="text-3xl font-black tracking-tight mb-6 leading-none">PRO<br />FACTORY</h3>
             <p className="text-black/60 text-sm leading-relaxed mb-10 font-bold uppercase tracking-tighter">
               Sistem ini dirancang untuk skalabilitas tinggi. Bangun 30 aplikasi PWA dengan satu fondasi yang kuat.
             </p>
@@ -178,13 +186,15 @@ export default function Dashboard() {
                 {user?.email?.[0].toUpperCase()}
               </div>
               <div className="overflow-hidden">
-                <p className="font-black text-xl truncate uppercase italic tracking-tight">{user?.email?.split('@')[0]}</p>
+                <p className="font-black text-xl truncate uppercase italic tracking-tight">
+                  {profile?.full_name || user?.email?.split('@')[0]}
+                </p>
                 <p className="text-[10px] text-zinc-700 truncate font-bold tracking-[0.2em]">{user?.email}</p>
               </div>
             </div>
-            <button 
+            <button
               onClick={async () => {
-                await supabase.auth.signOut()
+                await signOut()
                 navigate('/login')
               }}
               className="w-full flex items-center justify-center gap-4 py-5 text-[10px] font-bold text-zinc-700 hover:text-red-500 hover:bg-red-500/5 rounded-2xl transition-all border border-zinc-900 hover:border-red-500/20 uppercase tracking-[0.3em]"

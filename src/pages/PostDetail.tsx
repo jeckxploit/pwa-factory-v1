@@ -3,11 +3,12 @@ import { useParams, useNavigate } from "react-router-dom"
 import { getPostById } from "../services/publicPostService"
 import { motion } from "framer-motion"
 import { ArrowLeft, Smartphone, Activity, Box, Calendar, User } from "lucide-react"
+import type { Post } from "../types/post"
 
 export default function PostDetail() {
   const { slug } = useParams()
   const navigate = useNavigate()
-  const [post, setPost] = useState<any>(null)
+  const [post, setPost] = useState<Post | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export default function PostDetail() {
   return (
     <div className="min-h-screen bg-black text-white p-8 lg:p-24">
       <div className="max-w-4xl mx-auto">
-        <button 
+        <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors mb-16 group"
         >
@@ -47,7 +48,7 @@ export default function PostDetail() {
             <h1 className="text-5xl md:text-8xl font-black tracking-tighter uppercase italic leading-none mb-12">
               {post.title}
             </h1>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               <div className="bg-zinc-950 border border-zinc-900 p-6 rounded-3xl">
                 <Box size={16} className="text-zinc-700 mb-3" />

@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom"
 import { getPublicPosts } from "../services/postService"
 import { motion } from "framer-motion"
 import { Smartphone, Box, Activity } from "lucide-react"
+import type { Post } from "../types/post"
 import toast from "react-hot-toast"
 
 export default function PublicBlog() {
   const { userId } = useParams()
-  const [posts, setPosts] = useState<any[]>([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -17,7 +18,7 @@ export default function PublicBlog() {
           setPosts(data || [])
           setLoading(false)
         })
-        .catch((err) => {
+        .catch((err: unknown) => {
           console.error(err)
           toast.error("Gagal sinkronisasi data publik")
           setLoading(false)

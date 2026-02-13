@@ -25,8 +25,9 @@ export const AvatarUpload = ({ url, onUpload }: { url?: string, onUpload: (url: 
       const { data } = supabase.storage.from('avatars').getPublicUrl(filePath)
       onUpload(data.publicUrl)
       toast.success('Foto profil diperbarui!')
-    } catch (error: any) {
-      toast.error(error.message)
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Terjadi kesalahan'
+      toast.error(message)
     } finally {
       setUploading(false)
     }

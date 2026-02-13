@@ -2,12 +2,13 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { getAllPublicPosts } from "../services/publicPostService"
 import { Smartphone, Activity, ArrowRight, Cpu } from "lucide-react"
+import type { Post } from "../types/post"
 import { Link } from "react-router-dom"
 import { Button } from "../components/ui/Button"
 import toast from "react-hot-toast"
 
 export default function Home() {
-  const [posts, setPosts] = useState<any[]>([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -16,9 +17,10 @@ export default function Home() {
         setPosts(data)
         setLoading(false)
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
+        const message = error instanceof Error ? error.message : 'Terjadi kesalahan'
         console.error("[Home] Error loading feed:", error)
-        toast.error("Gagal memuat data feed: " + error.message)
+        toast.error("Gagal memuat data feed: " + message)
         setLoading(false)
       })
   }, [])
@@ -44,7 +46,7 @@ export default function Home() {
             <Activity size={14} className="animate-pulse text-green-500" /> Global Production Feed
           </div>
           <h1 className="text-6xl md:text-9xl font-black tracking-tighter leading-none mb-8">
-            OPEN <span className="text-zinc-900">SOURCE</span><br/>ENGINE
+            OPEN <span className="text-zinc-900">SOURCE</span><br />ENGINE
           </h1>
           <p className="text-zinc-500 max-w-xl text-lg uppercase tracking-tight font-medium">
             Menampilkan output real-time dari seluruh unit produksi PWA Factory.
@@ -73,7 +75,7 @@ export default function Home() {
                   </div>
                   <span className="text-[10px] font-bold text-zinc-800 uppercase tracking-widest">Node: {post.id.slice(0, 8)}</span>
                 </div>
-                
+
                 <h2 className="text-4xl font-black tracking-tighter uppercase italic mb-4 group-hover:translate-x-2 transition-transform duration-500">
                   {post.title}
                 </h2>
