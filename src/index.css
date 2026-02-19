@@ -3,32 +3,39 @@
 @theme {
   --color-premium-glow: rgba(255, 255, 255, 0.03);
   --font-sans: "Inter", "Geist", system-ui, sans-serif;
+  
+  --color-emerald-glow: rgba(16, 185, 129, 0.15);
+  --color-amber-glow: rgba(245, 158, 11, 0.15);
+  --color-violet-glow: rgba(139, 92, 246, 0.15);
+  --color-rose-glow: rgba(244, 63, 94, 0.15);
 }
 
 body {
-  @apply bg-black text-white antialiased selection:bg-white selection:text-black;
+  @apply bg-black text-zinc-100 antialiased selection:bg-emerald-500/30 selection:text-white;
   background: 
-    radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
-    #000000;
+    radial-gradient(circle at 50% -20%, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.03) 0%, transparent 35%),
+    radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.03) 0%, transparent 35%),
+    #020202;
   background-attachment: fixed;
 }
 
 /* Micro-interactions & Smoothness */
 * {
-  @apply transition-colors duration-200;
+  @apply transition-all duration-300;
 }
 
 /* Custom scrollbar for Engine OS feel */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-transparent;
+  @apply bg-black/20;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-zinc-800 rounded-full hover:bg-zinc-600;
+  @apply bg-zinc-800/50 rounded-full hover:bg-zinc-700 transition-colors;
 }
 
 /* Typography Sharpness */
@@ -38,13 +45,32 @@ h1, h2, h3, h4 {
 
 /* Global Utility Classes */
 .glass-panel {
-  @apply bg-zinc-950/50 border border-zinc-800 backdrop-blur-xl;
+  @apply bg-zinc-950/40 border border-zinc-800/40 backdrop-blur-3xl;
 }
 
+.glass-card {
+  @apply bg-zinc-900/20 border border-white/5 backdrop-blur-2xl rounded-[2.5rem] relative overflow-hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.glass-card:hover {
+  @apply border-white/10;
+  box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
+}
+
+.neon-glow-emerald { box-shadow: 0 0 40px -10px var(--color-emerald-glow); }
+.neon-glow-amber { box-shadow: 0 0 40px -10px var(--color-amber-glow); }
+.neon-glow-violet { box-shadow: 0 0 40px -10px var(--color-violet-glow); }
+.neon-glow-rose { box-shadow: 0 0 40px -10px var(--color-rose-glow); }
+
 .engine-container {
-  @apply min-h-screen bg-[#050505] text-zinc-100 selection:bg-emerald-500/30 font-sans;
+  @apply min-h-screen text-zinc-100 font-sans;
 }
 
 .premium-gradient-text {
-  @apply bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent;
+  @apply bg-gradient-to-br from-white via-zinc-200 to-zinc-500 bg-clip-text text-transparent;
+}
+
+.accent-gradient-text {
+  @apply bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent;
 }
