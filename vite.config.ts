@@ -11,24 +11,39 @@ export default defineConfig({
         enabled: true
       },
       manifest: {
-        name: 'PWA Factory Template',
-        short_name: 'PWA Factory',
-        description: 'Master template for 30 PWA production system',
+        name: 'PWA Factory v2',
+        short_name: 'PWAFactory',
+        description: 'Premium PWA Production System',
         theme_color: '#000000',
         background_color: '#000000',
         display: 'standalone',
+        orientation: 'portrait',
         scope: '/',
         start_url: '/',
         icons: [
           {
             src: '/pwa-192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/pwa-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable'
           },
           {
             src: '/pwa-512.png',
             sizes: '512x512',
-            type: 'image/png'
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/pwa-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
         ]
       }

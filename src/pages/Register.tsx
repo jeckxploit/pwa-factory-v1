@@ -39,10 +39,11 @@ export default function Register() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={() => navigate('/')}
-        className="fixed top-8 left-8 p-4 glass-panel rounded-2xl hover:border-white/20 transition-all flex items-center gap-3 group z-50 text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white"
+        className="fixed top-4 left-4 sm:top-8 sm:left-8 p-3 sm:p-4 glass-panel rounded-2xl hover:border-white/20 transition-all flex items-center gap-2 sm:gap-3 group z-50 text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white"
       >
-        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-        BACK NAVIGATION
+        <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+        <span className="hidden xs:inline">BACK NAVIGATION</span>
+        <span className="xs:hidden">BACK</span>
       </motion.button>
 
       <motion.div
@@ -51,10 +52,10 @@ export default function Register() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="w-full max-w-md relative z-10"
       >
-        <form onSubmit={handleRegister} className="glass-card p-10 md:p-14 border-white/5 shadow-2xl">
-          <div className="flex justify-center mb-10">
-            <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center text-emerald-500 shadow-inner">
-              <UserPlus size={32} />
+        <form onSubmit={handleRegister} className="glass-card p-8 md:p-14 border-white/5 shadow-2xl">
+          <div className="flex justify-center mb-8 lg:mb-10">
+            <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center text-emerald-500 shadow-inner">
+              <UserPlus className="w-6 h-6 lg:w-8 lg:h-8" />
             </div>
           </div>
 

@@ -3,16 +3,22 @@
 @theme {
   --color-premium-glow: rgba(255, 255, 255, 0.03);
   --font-sans: "Inter", "Geist", system-ui, sans-serif;
-  
+
   --color-emerald-glow: rgba(16, 185, 129, 0.15);
   --color-amber-glow: rgba(245, 158, 11, 0.15);
   --color-violet-glow: rgba(139, 92, 246, 0.15);
   --color-rose-glow: rgba(244, 63, 94, 0.15);
 }
 
+html,
+body {
+  @apply m-0 p-0 overflow-x-hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   @apply bg-black text-zinc-100 antialiased selection:bg-emerald-500/30 selection:text-white;
-  background: 
+  background:
     radial-gradient(circle at 50% -20%, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
     radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.03) 0%, transparent 35%),
     radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.03) 0%, transparent 35%),
@@ -39,7 +45,10 @@ body {
 }
 
 /* Typography Sharpness */
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   @apply tracking-tighter font-black uppercase italic;
 }
 
@@ -55,13 +64,24 @@ h1, h2, h3, h4 {
 
 .glass-card:hover {
   @apply border-white/10;
-  box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
 }
 
-.neon-glow-emerald { box-shadow: 0 0 40px -10px var(--color-emerald-glow); }
-.neon-glow-amber { box-shadow: 0 0 40px -10px var(--color-amber-glow); }
-.neon-glow-violet { box-shadow: 0 0 40px -10px var(--color-violet-glow); }
-.neon-glow-rose { box-shadow: 0 0 40px -10px var(--color-rose-glow); }
+.neon-glow-emerald {
+  box-shadow: 0 0 40px -10px var(--color-emerald-glow);
+}
+
+.neon-glow-amber {
+  box-shadow: 0 0 40px -10px var(--color-amber-glow);
+}
+
+.neon-glow-violet {
+  box-shadow: 0 0 40px -10px var(--color-violet-glow);
+}
+
+.neon-glow-rose {
+  box-shadow: 0 0 40px -10px var(--color-rose-glow);
+}
 
 .engine-container {
   @apply min-h-screen text-zinc-100 font-sans;

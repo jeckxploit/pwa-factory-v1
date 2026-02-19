@@ -52,28 +52,28 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12 lg:py-20 lg:px-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 lg:py-20 lg:px-12">
       {/* Header Area */}
-      <header className="relative mb-20">
+      <header className="relative mb-16 lg:mb-20">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-violet-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="relative flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+        <div className="relative flex flex-col lg:flex-row lg:items-end justify-between gap-8 lg:gap-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="flex items-center gap-3 text-zinc-500 text-[10px] font-bold uppercase tracking-[0.4em] mb-16">
-              <span className="w-8 h-[1px] bg-zinc-800" />
+            <div className="flex items-center gap-3 text-zinc-500 text-[10px] font-bold uppercase tracking-[0.4em] mb-10 lg:mb-16">
+              <span className="w-6 lg:w-8 h-[1px] bg-zinc-800" />
               <Activity size={12} className="text-emerald-500 animate-pulse" />
               Mainframe Operational Stage
             </div>
-            <h1 className="text-[clamp(2.5rem,8vw,5rem)] font-black tracking-tighter leading-[0.85] mb-4">
+            <h1 className="text-[clamp(2rem,10vw,5rem)] font-black tracking-tighter leading-[0.85] mb-4">
               <span className="premium-gradient-text block">CORE</span>
               <span className="text-white/20">MODULE</span>
             </h1>
-            <p className="text-zinc-500 text-xs font-medium max-w-sm tracking-tight opacity-80">
+            <p className="text-zinc-500 text-[10px] lg:text-xs font-medium max-w-sm tracking-tight opacity-80">
               Integrated development environment for next-generation <span className="text-zinc-400">PWA architectures</span>.
             </p>
           </motion.div>
@@ -82,11 +82,12 @@ export default function Dashboard() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.8 }}
+            className="w-full lg:w-auto"
           >
             <Button
               onClick={() => navigate('/create')}
               size="lg"
-              className="bg-zinc-100 text-black hover:bg-white px-8 py-6 rounded-full text-[10px] font-black tracking-[0.2em] shadow-[0_0_40px_rgba(255,255,255,0.1)] group"
+              className="w-full lg:w-auto bg-zinc-100 text-black hover:bg-white px-8 py-6 rounded-full text-[10px] font-black tracking-[0.2em] shadow-[0_0_40px_rgba(255,255,255,0.1)] group"
             >
               <Plus size={16} strokeWidth={3} className="mr-2" />
               INITIALIZE APP
@@ -97,7 +98,7 @@ export default function Dashboard() {
       </header>
 
       {/* Stats Cluster */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mb-16 lg:mb-20">
         {[
           { label: 'Active Nodes', value: posts.length, icon: Box, glow: 'neon-glow-emerald' },
           { label: 'Security Level', value: 'Alpha-9', icon: Shield, glow: 'neon-glow-amber' },
@@ -109,10 +110,10 @@ export default function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 + i * 0.1, duration: 0.8 }}
             whileHover={{ y: -8, scale: 1.01 }}
-            className={`glass-card p-8 group ${stat.glow}`}
+            className={`glass-card p-6 lg:p-8 group ${stat.glow}`}
           >
-            <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
-              <stat.icon size={64} strokeWidth={1} />
+            <div className="absolute top-0 right-0 p-4 lg:p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+              <stat.icon className="w-14 h-14 lg:w-16 lg:h-16" strokeWidth={1} />
             </div>
             <div className="relative z-10">
               <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-white/5 flex items-center justify-center mb-6 group-hover:border-white/20 transition-all">
@@ -120,7 +121,7 @@ export default function Dashboard() {
               </div>
               <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-[0.4em] mb-2">{stat.label}</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black italic tracking-tighter uppercase">{stat.value}</span>
+                <span className="text-2xl lg:text-3xl font-black italic tracking-tighter uppercase">{stat.value}</span>
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
               </div>
             </div>
