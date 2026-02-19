@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { BarChart3, Home, Menu, Settings, PlusCircle, Smartphone, Cpu, ClipboardList, LogOut } from 'lucide-react'
+import { BarChart3, Home, Settings, PlusCircle, Smartphone, Cpu, ClipboardList, LogOut } from 'lucide-react'
 import { useAppStore } from '../../store/useStore'
 import { useAuth } from '../../hooks/useAuth'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -28,13 +28,6 @@ export default function Sidebar() {
 
   return (
     <>
-      <button
-        onClick={toggleSidebar}
-        className="fixed top-8 left-8 z-50 p-4 glass-panel rounded-2xl lg:hidden hover:border-white/20 active:scale-95 group transition-all"
-      >
-        <Menu size={20} className="text-zinc-400 group-hover:text-white transition-colors" />
-      </button>
-
       <AnimatePresence>
         {(isSidebarOpen || window.innerWidth >= 1024) && (
           <>
@@ -50,7 +43,7 @@ export default function Sidebar() {
               initial={{ x: -280 }}
               animate={{ x: 0 }}
               exit={{ x: -280 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 40 }}
               className="fixed left-0 top-0 h-full w-[280px] sm:w-80 glass-panel border-r border-white/5 z-50 flex flex-col"
             >
               <div className="p-12 pb-8">

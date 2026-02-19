@@ -54,7 +54,17 @@ h4 {
 
 /* Global Utility Classes */
 .glass-panel {
-  @apply bg-zinc-950/40 border border-zinc-800/40 backdrop-blur-3xl;
+  @apply bg-zinc-900/40 border border-white/10;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  will-change: transform, opacity;
+}
+
+@media (max-width: 768px) {
+  .glass-panel {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
 }
 
 .glass-card {
