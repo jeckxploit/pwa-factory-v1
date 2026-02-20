@@ -26,8 +26,13 @@ body {
   background-attachment: fixed;
 }
 
-/* Micro-interactions & Smoothness */
-* {
+/* Performance-first selection of transitions */
+button, 
+a, 
+input, 
+select, 
+textarea,
+.transition-all {
   @apply transition-all duration-300;
 }
 

@@ -43,7 +43,7 @@ export default function Sidebar() {
               initial={{ x: -280 }}
               animate={{ x: 0 }}
               exit={{ x: -280 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 40 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 35, mass: 0.8 }}
               className="fixed left-0 top-0 h-full w-[280px] sm:w-80 glass-panel border-r border-white/5 z-50 flex flex-col"
             >
               <div className="p-12 pb-8">
