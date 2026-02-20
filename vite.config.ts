@@ -58,6 +58,7 @@ export default defineConfig({
           'vendor-utils': ['@supabase/supabase-js', 'zustand', 'react-hot-toast']
         }
       }
-    }
+    },
+    chunkSizeWarningLimit: 1000
   }
 })
