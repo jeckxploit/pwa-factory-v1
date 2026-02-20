@@ -1,8 +1,9 @@
 import { motion } from "framer-motion"
 import Sidebar from "./Sidebar"
 import { Outlet } from "react-router-dom"
-import { Menu, Cpu } from "lucide-react"
+import { Menu } from "lucide-react"
 import { useAppStore } from "../../store/useStore"
+import { Logo } from "../ui/Logo"
 
 export default function AppLayout() {
   const { toggleSidebar } = useAppStore()
@@ -18,10 +19,8 @@ export default function AppLayout() {
           <Menu size={18} className="text-zinc-400" />
         </button>
         <div className="flex items-center gap-3">
-          <span className="font-black tracking-tighter text-sm uppercase italic">JECK.</span>
-          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-            <Cpu size={16} className="text-black" />
-          </div>
+          <span className="font-black tracking-tighter text-sm uppercase italic text-zinc-400">JECK.</span>
+          <Logo size={32} />
         </div>
       </div>
 

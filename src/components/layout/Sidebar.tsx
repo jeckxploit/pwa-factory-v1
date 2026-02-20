@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { BarChart3, Home, Settings, PlusCircle, Smartphone, Cpu, ClipboardList, LogOut } from 'lucide-react'
+import { BarChart3, Home, Settings, PlusCircle, Smartphone, ClipboardList, LogOut } from 'lucide-react'
+import { Logo } from '../ui/Logo'
 import { useAppStore } from '../../store/useStore'
 import { useAuth } from '../../hooks/useAuth'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -48,10 +49,7 @@ export default function Sidebar() {
             >
               <div className="p-12 pb-8">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(255,255,255,0.1)] relative overflow-hidden group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <Cpu size={24} className="text-black relative z-10" />
-                  </div>
+                  <Logo size={48} />
                   <div>
                     <span className="block font-black tracking-tighter text-2xl uppercase italic leading-none">JECK.</span>
                     <span className="text-[9px] font-black text-emerald-500/50 uppercase tracking-[0.4em]">Matrix v2.4</span>
