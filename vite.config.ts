@@ -48,5 +48,16 @@ export default defineConfig({
         ]
       }
     })
-  ]
+  ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ui': ['framer-motion', 'lucide-react'],
+          'vendor-utils': ['@supabase/supabase-js', 'zustand', 'react-hot-toast']
+        }
+      }
+    }
+  }
 })
