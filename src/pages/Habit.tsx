@@ -162,7 +162,7 @@ export default function Habit() {
             <div className="flex items-center gap-2 text-emerald-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-3">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> System Operational
             </div>
-            <h1 className="text-7xl font-black tracking-tighter uppercase italic leading-[0.8]">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.8]">
               HABIT<br /><span className="text-zinc-800">ENGINE</span>
             </h1>
           </div>
@@ -184,18 +184,18 @@ export default function Habit() {
       <section className="mb-16">
         <div className="relative group">
           <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-          <div className="relative bg-zinc-950 border border-zinc-800 p-2 rounded-[2rem] flex gap-2">
+          <div className="relative bg-zinc-950 border border-zinc-800 p-1.5 sm:p-2 rounded-2xl sm:rounded-[2rem] flex flex-col sm:flex-row gap-2">
             <input
               value={newHabit}
               onChange={(e) => setNewHabit(e.target.value)}
-              placeholder="Inject new behavior protocol..."
-              className="flex-1 bg-transparent border-none px-6 py-4 text-white placeholder:text-zinc-800 focus:outline-none font-bold uppercase tracking-tight text-lg"
+              placeholder="Inject new protocol..."
+              className="flex-1 bg-transparent border-none px-4 sm:px-6 py-3 sm:py-4 text-white placeholder:text-zinc-800 focus:outline-none font-bold uppercase tracking-tight text-base sm:text-lg"
             />
             <button
               onClick={addHabit}
-              className="bg-zinc-100 text-black px-10 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-emerald-500 hover:text-white transition-all active:scale-95 flex items-center gap-2"
+              className="bg-zinc-100 text-black px-6 sm:px-10 py-3 sm:py-0 rounded-xl sm:rounded-2xl font-black uppercase tracking-widest text-[10px] sm:text-xs hover:bg-emerald-500 hover:text-white transition-all active:scale-95 flex items-center justify-center gap-2"
             >
-              <Plus size={18} strokeWidth={3} /> Execute
+              <Plus size={16} strokeWidth={3} /> Execute
             </button>
           </div>
         </div>
